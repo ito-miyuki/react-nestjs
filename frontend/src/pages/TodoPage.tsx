@@ -1,10 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-const TodoPage = () => {
+const TodoPage = ({ user }: { user: { name: string } }) => {
     const [todo, setTodo] = useState("");
       const [list, setList] = useState<string[]>([]);
     
-      const handleAdd = (e: Event) => {
+      const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
         if (!todo) return;
         setList([...list, todo]);
@@ -12,7 +12,7 @@ const TodoPage = () => {
       }
   return (
     <div>
-        <h1>What To-Do today?</h1>
+        <h1>{`Hi, ${user.name}! What To-Do today?`}</h1>
         <form onSubmit={handleAdd}>
             <label htmlFor="todo-input">Add to-do:</label>
             <input

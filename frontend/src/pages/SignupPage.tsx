@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { useState } from 'react'
+import { createUser } from '../api/user';
 
 const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
     const [name, setName] = useState<string>("");
@@ -9,13 +9,11 @@ const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:3000/users', {
-                name,
-                email
-            });
-            onSignup(res.data);
+          const newUser = await createUser({ name, email });
+          onSignup(newUser);
         } catch (err) {
-            setError("Failed to signup");
+          console.log(err);
+          setError("Failed to signup");
         }
     }
 
@@ -37,7 +35,7 @@ const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <button>Sign up!</button>
+        <button>Sign Up</button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>

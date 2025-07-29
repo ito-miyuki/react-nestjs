@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import { getUserByEmail } from '../api/user'
 
 const LoginPage = ({ onLogin }: { onLogin: (user: any) => void }) => {
     const [email, setEmail] = useState<string>("")
@@ -8,8 +8,7 @@ const LoginPage = ({ onLogin }: { onLogin: (user: any) => void }) => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-          const res = await axios.get(`http://localhost:3000/users/email/${email}`);
-          const user = res.data;
+          const user = await getUserByEmail(email);
           if (user) {
             onLogin(user);
           } else {
