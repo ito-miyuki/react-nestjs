@@ -1,37 +1,20 @@
 import { useState } from 'react'
 import './app.css'
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import TodoPage from './pages/TodoPage';
 
 function App() {
-  const [todo, setTodo] = useState("");
-  const [list, setList] = useState<string[]>([]);
+  const [user, setUser] = useState(null);
 
-  const handleAdd = (e: Event) => {
-    e.preventDefault();
-    if (!todo) return;
-    setList([...list, todo]);
-    setTodo("");
-  }
+  if (user)
+    return <TodoPage user={user} />
 
   return (
     <>
-      <h1>What to do today?</h1>
-      <form onSubmit={handleAdd}>
-        <label htmlFor="todo-input">Add to-do:</label>
-        <input
-          id="todo-input"
-          type="text"
-          value={todo}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)}
-        />
-        <button type="submit">Add</button>
-      </form>
-      <div className="list-container">
-        <ul>
-          {list.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-      </div>
+      <LoginPage  onLogin={setUser}/>
+      <p>don't have an account yet?</p>
+      <SignupPage onSignup={setUser}/>
     </>
   )
 }
