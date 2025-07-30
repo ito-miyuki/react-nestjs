@@ -1,15 +1,34 @@
 import React, { useState } from "react";
+import { createTodo, deleteTodo } from "../api/todo";
 
-const TodoPage = ({ user }: { user: { name: string } }) => {
+type Todo = {
+  id: number;
+  title: string;
+};
+
+const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
     const [todo, setTodo] = useState("");
-      const [list, setList] = useState<string[]>([]);
+      const [list, setList] = useState<Todo[]>([]);
     
-      const handleAdd = (e: React.FormEvent) => {
+      const handleAdd = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!todo) return;
-        setList([...list, todo]);
-        setTodo("");
+
+        try {
+          const newTodo = await createTodo({ title: todo, userId: user.id });
+          setList([...list, newTodo]);
+          setTodo("");
+        } catch (err) {
+          console.error("Failed to create todo", err);
+        }
       }
+
+      const handleDelete = async (id: number) => {
+        await deleteTodo(id);
+        setList(list.filter((item) => item.id != id));
+
+      }
+
   return (
     <div>
         <h1>{`Hi, ${user.name}! What To-Do today?`}</h1>
@@ -26,7 +45,10 @@ const TodoPage = ({ user }: { user: { name: string } }) => {
         <div className="list-container">
             <ul>
             {list.map((item, i) => (
-                <li key={i}>{item}</li>
+                <li key={i}>
+                  {item.title}
+                  <button onClick={() => handleDelete(item.id)}>×</button>
+                </li>
             ))}
             </ul>
         </div>
