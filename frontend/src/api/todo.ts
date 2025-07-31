@@ -13,3 +13,8 @@ export const deleteTodo = async (id: number) => {
   const res = await api.delete(`/todo/${id}`);
   return res.data;
 };
+
+export const updateTodo = async (id: number, data: { completed: boolean }) => {
+  const res = await api.patch(`/todo/${id}`, data);
+  return res.data;
+}

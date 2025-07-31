@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { createTodo, deleteTodo } from "../api/todo";
+import { createTodo, deleteTodo, updateTodo } from "../api/todo";
 
 type Todo = {
   id: number;
   title: string;
+  completed: boolean;
 };
 
 const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
@@ -29,6 +30,20 @@ const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
 
       }
 
+      const handleToggle = async (id: number, completed: boolean) => {
+        try {
+          await updateTodo(id, { completed });
+
+          setList(
+            list.map((item) =>
+              item.id === id ? { ...item, completed } : item
+            )
+          );
+        } catch (err) {
+          console.error("Failed to toggle todo", err);
+        }
+      };
+
   return (
     <div>
         <h1>{`Hi, ${user.name}! What To-Do today?`}</h1>
@@ -48,6 +63,10 @@ const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
                 <li key={i}>
                   {item.title}
                   <button onClick={() => handleDelete(item.id)}>×</button>
+                  <input
+                    type="checkbox"
+                    checked={item.completed}
+                    onChange={() => handleToggle(item.id, !item.completed)} />
                 </li>
             ))}
             </ul>
