@@ -38,7 +38,7 @@ export class TodoService {
     return this.prisma.todo.update({
       where: { id },
       data,
-    })
+    });
   }
 
   remove(id: number) {
