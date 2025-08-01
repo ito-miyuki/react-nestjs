@@ -19,7 +19,9 @@ const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
 
   return (
     <div>
-      <h2>Register your account</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">
+        Register your account
+      </h2>
       <form onSubmit={handleSignup}>
         <input
           type="text"
@@ -27,6 +29,7 @@ const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
         <input
           type="text"
@@ -34,10 +37,13 @@ const SignupPage = ({ onSignup }: { onSignup: (user: any) => void }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <button>Sign Up</button>
+        <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition">
+          Sign Up
+        </button>
       </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <p className="text-red-500 mt-3 text-sm text-center">{error}</p>
     </div>
   )
 }
