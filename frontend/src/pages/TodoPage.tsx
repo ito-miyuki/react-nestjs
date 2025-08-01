@@ -45,28 +45,54 @@ const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
       };
 
   return (
-    <div>
-        <h1>{`Hi, ${user.name}! What To-Do today?`}</h1>
-        <form onSubmit={handleAdd}>
-            <label htmlFor="todo-input">Add to-do:</label>
-            <input
-            id="todo-input"
-            type="text"
-            value={todo}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)}
-            />
-            <button type="submit">Add</button>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
+        <h1 className="text-2xl font-bold text-blue-600 mb-6">
+          {`Hi, ${user.name}! What To-Do today?`}
+        </h1>
+        <form onSubmit={handleAdd} className="w-full max-w-md flex gap-2 mb-6">
+          <input
+          id="todo-input"
+          type="text"
+          value={todo}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTodo(e.target.value)}
+          placeholder="Enter a new task..."
+          className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+          >
+            Add
+          </button>
         </form>
-        <div className="list-container">
-            <ul>
-            {list.map((item, i) => (
-                <li key={i}>
-                  {item.title}
-                  <button onClick={() => handleDelete(item.id)}>×</button>
+        <div className="w-full max-w-md">
+            <ul className="space-y-3">
+            {list.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between bg-white shadow-sm rounded px-4 py-2"
+                >
+                <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
                     checked={item.completed}
-                    onChange={() => handleToggle(item.id, !item.completed)} />
+                    onChange={() => handleToggle(item.id, !item.completed)}
+                    className="h-4 w-4"
+                  />
+                  <span
+                    className={`${
+                      item.completed ? "line-through text-gray-400" : ""
+                    }`}
+                  >
+                    {item.title}
+                  </span>
+                </div>
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="text-red-500 hover:text-red-700 text-lg"
+                  >
+                    ×
+                </button>
                 </li>
             ))}
             </ul>
