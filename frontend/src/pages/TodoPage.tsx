@@ -9,40 +9,45 @@ type Todo = {
 
 const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
     const [todo, setTodo] = useState("");
-      const [list, setList] = useState<Todo[]>([]);
-    
-      const handleAdd = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!todo) return;
+    const [list, setList] = useState<Todo[]>([]);
+    const [search, setSearch] = useState<string>("");
+  
+    const handleAdd = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!todo) return;
 
-        try {
-          const newTodo = await createTodo({ title: todo, userId: user.id });
-          setList([...list, newTodo]);
-          setTodo("");
-        } catch (err) {
-          console.error("Failed to create todo", err);
-        }
+      try {
+        const newTodo = await createTodo({ title: todo, userId: user.id });
+        setList([...list, newTodo]);
+        setTodo("");
+      } catch (err) {
+        console.error("Failed to create todo", err);
       }
+    }
 
-      const handleDelete = async (id: number) => {
-        await deleteTodo(id);
-        setList(list.filter((item) => item.id != id));
+    const filteredList = list.filter((todo) =>
+      todo.title.toLowerCase().includes(search.toLowerCase())
+    )
 
+    const handleDelete = async (id: number) => {
+      await deleteTodo(id);
+      setList(list.filter((item) => item.id != id));
+
+    }
+
+    const handleToggle = async (id: number, completed: boolean) => {
+      try {
+        await updateTodo(id, { completed });
+
+        setList(
+          list.map((item) =>
+            item.id === id ? { ...item, completed } : item
+          )
+        );
+      } catch (err) {
+        console.error("Failed to toggle todo", err);
       }
-
-      const handleToggle = async (id: number, completed: boolean) => {
-        try {
-          await updateTodo(id, { completed });
-
-          setList(
-            list.map((item) =>
-              item.id === id ? { ...item, completed } : item
-            )
-          );
-        } catch (err) {
-          console.error("Failed to toggle todo", err);
-        }
-      };
+    };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
@@ -65,9 +70,16 @@ const TodoPage = ({ user }: { user: { id: number; name: string } }) => {
             Add
           </button>
         </form>
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-md mb-4 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
         <div className="w-full max-w-md">
             <ul className="space-y-3">
-            {list.map((item) => (
+            {filteredList.map((item) => (
                 <li
                   key={item.id}
                   className="flex items-center justify-between bg-white shadow-sm rounded px-4 py-2"
