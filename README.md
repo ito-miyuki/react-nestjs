@@ -13,20 +13,20 @@
 
 以下の手順で開発環境を構築できます。
 
-# リポジトリをクローン
+## リポジトリをクローン
 ```bash
 git clone https://github.com/ito-miyuki/react-nestjs.git
 cd react-nestjs
 ```
 
-# フロントエンドの起動
+## フロントエンドの起動
 ```
 cd frontend
 npm install
 npm run dev
 ```
 
-# 別ターミナルでバックエンドを起動
+## 別ターミナルでバックエンドを起動
 ```
 cd backend
 npm install
